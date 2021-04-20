@@ -112,7 +112,7 @@ class _ExpandableSubTreeState<T> extends State<ExpandableSubTree<T>> {
                         child: widget.nodeBuilder(context, widget.node.value),
                       ),
                       Container(
-                        child: state == TwistyState.closed
+                        child: state == TwistyState.open
                             ? Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
@@ -154,7 +154,7 @@ class _ThinDivider extends StatelessWidget {
         // width: double.infinity,
         decoration: BoxDecoration(
             border: Border.symmetric(
-                horizontal: BorderSide(width: 0.5, color: Colors.green))),
+                horizontal: BorderSide(width: 0.5))),
       ),
     );
   }
