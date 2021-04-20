@@ -3,8 +3,6 @@ import 'package:expandable_tree_menu/src/nodes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-// TODO: Implement tests
-
 void main() {
   testWidgets('Test With Empty List of Nodes', (WidgetTester tester) async {
     await tester.pumpWidget(
