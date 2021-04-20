@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-const Widget DEFAULT_CLOSED_TWISTY = Icon(Icons.expand_more);
-const Widget DEFAULT_OPENED_TWISTY = Icon(Icons.expand_less);
-const Widget DEFAULT_LEAFNODE_TWISTY = Icon(
+const Icon DEFAULT_CLOSED_TWISTY = Icon(Icons.expand_more);
+const Icon DEFAULT_OPENED_TWISTY = Icon(Icons.expand_less);
+const Icon DEFAULT_LEAFNODE_TWISTY = Icon(
   Icons.circle,
   color: Colors.transparent, // Spacer to ensure alignment of leaf nodes
 );
