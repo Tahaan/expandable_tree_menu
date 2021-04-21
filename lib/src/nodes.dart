@@ -104,7 +104,7 @@ class _ExpandableSubTreeState<T> extends State<ExpandableSubTree<T>> {
             child: Container(
               child: Align(
                 alignment: Alignment.topLeft,
-                child: Container(
+                child: Material(
                   child: ExpansionTile(
                     initiallyExpanded: widget.defaultState == TwistyState.open,
                     tilePadding: EdgeInsets.zero,
