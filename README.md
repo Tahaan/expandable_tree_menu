@@ -1,6 +1,9 @@
 # expandable_tree_menu
 
-A Tree of Sub-menus that can be opened/closed as needed.
+A Tree of Sub-menus that can be expanded/collapsed and each node can recursively contain another
+tree.
+
+Using the onSelect callback allows the Tree to be used as a menu.
 
 ## Getting Started
 
