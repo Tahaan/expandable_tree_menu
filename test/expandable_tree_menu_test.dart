@@ -30,7 +30,7 @@ final _et = ExpandableTree<String>(
 final expandableTreeStringType = _et.runtimeType;
 
 
-final _expandableSubTree = ExpandableSubTree<String>(
+final _expandableSubTree = CustomSubTreeWrapper<String>(
   defaultState: TwistyState.closed,
   childIndent: DEFAULT_CHILD_INDENT,
   node: TreeNode('Data'),

@@ -84,7 +84,7 @@ class ExpandableTree<T> extends StatelessWidget {
           },
           child: nodeBuilder(context, nodes[itemIndex].value));
     }
-    return ExpandableSubTree<T>(
+    return CustomSubTreeWrapper<T>(
       childIndent: childIndent,
       defaultState: initiallyExpanded ? TwistyState.open : TwistyState.closed,
       onSelect: onSelect,
