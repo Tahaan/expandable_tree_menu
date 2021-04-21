@@ -18,7 +18,7 @@ class ExpandableMenuLeafNode extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        DEFAULT_LEAFNODE_TWISTY,
+        // DEFAULT_LEAFNODE_TWISTY,
         GestureDetector(
           onTap: onSelect,
           child: child,
@@ -61,6 +61,8 @@ class ExpandableSubTree<T> extends StatefulWidget {
   final Widget openTwisty;
   final Widget Function(BuildContext, T) nodeBuilder; // Use Label
   final TreeNode<T> node; // Null when this is the root of the tree
+  final double childIndent;
+  final TwistyState defaultState;
 
   const ExpandableSubTree({
     Key? key,
@@ -70,6 +72,8 @@ class ExpandableSubTree<T> extends StatefulWidget {
     required this.subNodes,
     required this.nodeBuilder,
     required this.node,
+    required this.childIndent,
+    required this.defaultState,
   }) : super(key: key);
 
   @override
@@ -89,45 +93,72 @@ class _ExpandableSubTreeState<T> extends State<ExpandableSubTree<T>> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           // Twisty
-          GestureDetector(
-            onTap: toggleState,
-            child: state == TwistyState.open
-                ? widget.openTwisty
-                : widget.closedTwisty,
-          ),
+          // GestureDetector(
+          //   onTap: toggleState,
+          //   child: state == TwistyState.open
+          //       ? widget.openTwisty
+          //       : widget.closedTwisty,
+          // ),
           // Sub-menu
           Expanded(
             child: Container(
               child: Align(
                 alignment: Alignment.topLeft,
                 child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: ExpansionTile(
+                    initiallyExpanded: widget.defaultState == TwistyState.open,
+                    tilePadding: EdgeInsets.zero,
+                    childrenPadding: EdgeInsets.only(left: widget.childIndent),
+                    // iconColor: Colors.red,
+                    // childrenPadding: const EdgeInsets.symmetric(vertical: 30),
+                    // leading: state == TwistyState.open
+                    //         ? widget.openTwisty
+                    //         : widget.closedTwisty,
+                    // trailing: Container(),
+                    title: ExpandableNode(
+                      onSelect: () {
+                        widget.onSelect!(widget.node.value);
+                      },
+                      child: widget.nodeBuilder(context, widget.node.value),
+                    ),
                     children: [
-                      ExpandableNode(
-                        onSelect: () {
-                          widget.onSelect!(widget.node.value);
-                        },
-                        child: widget.nodeBuilder(context, widget.node.value),
-                      ),
-                      Container(
-                        child: state == TwistyState.open
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  _ThinDivider(),
-                                  ExpandableTree<T>(
-                                    nodes: widget.subNodes,
-                                    nodeBuilder: widget.nodeBuilder,
-                                    onSelect: widget.onSelect,
-                                  ),
-                                ],
-                              )
-                            : null,
+                      _ThinDivider(),
+                      ExpandableTree<T>(
+                        initiallyExpanded: widget.defaultState == TwistyState.open,
+                        childIndent: widget.childIndent,
+                        nodes: widget.subNodes,
+                        nodeBuilder: widget.nodeBuilder,
+                        onSelect: widget.onSelect,
                       ),
                     ],
                   ),
+                  // child: Column(
+                  //   mainAxisAlignment: MainAxisAlignment.start,
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: [
+                  //     ExpandableNode(
+                  //       onSelect: () {
+                  //         widget.onSelect!(widget.node.value);
+                  //       },
+                  //       child: widget.nodeBuilder(context, widget.node.value),
+                  //     ),
+                  //     Container(
+                  //       child: state == TwistyState.open
+                  //           ? Column(
+                  //               crossAxisAlignment: CrossAxisAlignment.stretch,
+                  //               children: [
+                  //                 _ThinDivider(),
+                  //                 ExpandableTree<T>(
+                  //                   nodes: widget.subNodes,
+                  //                   nodeBuilder: widget.nodeBuilder,
+                  //                   onSelect: widget.onSelect,
+                  //                 ),
+                  //               ],
+                  //             )
+                  //           : null,
+                  //     ),
+                  //   ],
+                  // ),
                 ),
               ),
             ),
@@ -153,8 +184,7 @@ class _ThinDivider extends StatelessWidget {
       child: Container(
         // width: double.infinity,
         decoration: BoxDecoration(
-            border: Border.symmetric(
-                horizontal: BorderSide(width: 0.5))),
+            border: Border.symmetric(horizontal: BorderSide(width: 0.5))),
       ),
     );
   }

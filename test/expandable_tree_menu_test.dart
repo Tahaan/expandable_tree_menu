@@ -1,4 +1,5 @@
 import 'package:expandable_tree_menu/expandable_tree_menu.dart';
+import 'package:expandable_tree_menu/src/defaults.dart';
 import 'package:expandable_tree_menu/src/nodes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -90,6 +91,8 @@ void main() {
     expect(menuFinder, findsOneWidget);
 
     final submenu = ExpandableSubTree<String>(
+      defaultState: TwistyState.closed,
+      childIndent: DEFAULT_CHILD_INDENT,
       node: TreeNode('Data'),
       onSelect: (s) {},
       nodeBuilder: (cntext, nodeValue) {
