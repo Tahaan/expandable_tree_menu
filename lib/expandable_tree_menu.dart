@@ -53,7 +53,6 @@ class ExpandableTree<T> extends StatelessWidget {
   final double childIndent;
   final bool initiallyExpanded;
 
-  // TODO: Add "initial state" to Auto-expand or collapse sub nodes.
   // TODO: Add a controller to allow Expand-all / collapse-all functionality
 
   const ExpandableTree({
