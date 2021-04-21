@@ -4,6 +4,30 @@ import 'package:expandable_tree_menu/src/nodes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+final _et = ExpandableTree<String>(
+  onSelect: (s) {},
+  nodeBuilder: (cntext, nodeValue) {
+    return Container();
+  },
+  nodes: [],
+);
+
+final expandableTreeStringType = _et.runtimeType;
+
+
+final _expandableSubTree = ExpandableSubTree<String>(
+  defaultState: TwistyState.closed,
+  childIndent: DEFAULT_CHILD_INDENT,
+  node: TreeNode('Data'),
+  onSelect: (s) {},
+  nodeBuilder: (context, nodeValue) {
+    return Container();
+  },
+  subNodes: [],
+);
+
+final expandableSubTreeStringType = _expandableSubTree.runtimeType;
+
 void main() {
   testWidgets('Test With Empty List of Nodes', (WidgetTester tester) async {
     await tester.pumpWidget(
@@ -67,9 +91,9 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    // await tester.pump();
 
-    // debugDumpApp();
+    debugDumpApp();
 
     final text = find.text('Main Node #1');
     expect(text, findsOneWidget);
@@ -80,28 +104,10 @@ void main() {
     final subItemText = find.text('Main 1 Node #2');
     expect(subItemText, findsNothing);
 
-    var et = ExpandableTree<String>(
-      onSelect: (s) {},
-      nodeBuilder: (cntext, nodeValue) {
-        return Container();
-      },
-      nodes: [],
-    );
-    final menuFinder = find.byType(et.runtimeType);
+    final menuFinder = find.byType(expandableTreeStringType);
     expect(menuFinder, findsOneWidget);
 
-    final submenu = ExpandableSubTree<String>(
-      defaultState: TwistyState.closed,
-      childIndent: DEFAULT_CHILD_INDENT,
-      node: TreeNode('Data'),
-      onSelect: (s) {},
-      nodeBuilder: (cntext, nodeValue) {
-        return Container();
-      },
-      subNodes: [],
-    );
-
-    final subMenuFinder = find.byType(submenu.runtimeType);
+    final subMenuFinder = find.byType(expandableSubTreeStringType);
     expect(subMenuFinder, findsNWidgets(2));
 
     var clickThis = find.byIcon(Icons.expand_more);
