@@ -13,3 +13,5 @@ const Icon DEFAULT_LEAFNODE_TWISTY = Icon(
 enum TwistyState { root, open, closed, leaf }
 
 const TwistyState DEFAULT_EXPANDED_STATE = TwistyState.closed;
+
+const double DEFAULT_CHILD_INDENT = 28;

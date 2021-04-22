@@ -50,8 +50,9 @@ class ExpandableTree<T> extends StatelessWidget {
   final Widget closedTwisty;
   final Widget openTwisty;
   final Widget Function(BuildContext, T) nodeBuilder; // Use Label
+  final double childIndent;
+  final bool initiallyExpanded;
 
-  // TODO: Add "initial state" to Auto-expand or collapse sub nodes.
   // TODO: Add a controller to allow Expand-all / collapse-all functionality
 
   const ExpandableTree({
@@ -61,6 +62,8 @@ class ExpandableTree<T> extends StatelessWidget {
     this.openTwisty = DEFAULT_OPENED_TWISTY,
     required this.nodes,
     required this.nodeBuilder,
+    this.childIndent = DEFAULT_CHILD_INDENT,
+    this.initiallyExpanded = false,
   }) : super(key: key);
 
   @override
@@ -81,7 +84,9 @@ class ExpandableTree<T> extends StatelessWidget {
           },
           child: nodeBuilder(context, nodes[itemIndex].value));
     }
-    return ExpandableSubTree<T>(
+    return CustomSubTreeWrapper<T>(
+      childIndent: childIndent,
+      defaultState: initiallyExpanded ? TwistyState.open : TwistyState.closed,
       onSelect: onSelect,
       subNodes: nodes[itemIndex].subNodes,
       nodeBuilder: nodeBuilder,

@@ -1,13 +1,53 @@
 import 'package:expandable_tree_menu/expandable_tree_menu.dart';
+import 'package:expandable_tree_menu/src/defaults.dart';
 import 'package:expandable_tree_menu/src/nodes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+final nodeListWithSubNodes = [
+  TreeNode('Main Node #1', subNodes: [
+    TreeNode('Main 1 Node #1'),
+    TreeNode('Main 1 Node #2'),
+  ]),
+  TreeNode('Main Node #2', subNodes: [
+    TreeNode('Main 2 Node #1'),
+    TreeNode('Main 2 Node #2',
+    subNodes: [
+      TreeNode('Node 2-2-1'),
+      TreeNode('Node 2-2-2'),
+    ]),
+  ]),
+];
+
+final _et = ExpandableTree<String>(
+  onSelect: (s) {},
+  nodeBuilder: (cntext, nodeValue) {
+    return Container();
+  },
+  nodes: [],
+);
+
+final expandableTreeStringType = _et.runtimeType;
+
+
+final _expandableSubTree = CustomSubTreeWrapper<String>(
+  defaultState: TwistyState.closed,
+  childIndent: DEFAULT_CHILD_INDENT,
+  node: TreeNode('Data'),
+  onSelect: (s) {},
+  nodeBuilder: (context, nodeValue) {
+    return Container();
+  },
+  subNodes: [],
+);
+
+final expandableSubTreeStringType = _expandableSubTree.runtimeType;
 
 void main() {
   testWidgets('Test With Empty List of Nodes', (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
-        home: ExpandableTree(
+        home: ExpandableTree<dynamic>(
           nodes: [],
           nodeBuilder: (context, node) {
             return Text(node.runtimeType.toString());
@@ -15,6 +55,16 @@ void main() {
         ),
       ),
     );
+
+    debugDumpApp();
+
+    final subItem = find.byType(ExpandableMenuLeafNode);
+    expect(subItem, findsNothing);
+
+    final menuFinder = find.byType(ExpandableTree);
+    expect(menuFinder, findsOneWidget);
+
+
   });
 
   testWidgets('Test With 3 simple String nodes', (WidgetTester tester) async {
@@ -39,26 +89,16 @@ void main() {
     final nodes = find.byType(ExpandableMenuLeafNode);
     expect(nodes, findsNWidgets(3));
 
-    // final menuBase = find.byType(ExpandableTree);
-    // expect(menuBase, findsOneWidget);
+    final menuFinder = find.byType(expandableTreeStringType);
+    expect(menuFinder, findsOneWidget);
   });
 
-  testWidgets('Test With 2 nodes each with 2 sub-nodes',
+  testWidgets('Test With sub-nodes',
       (WidgetTester tester) async {
-    final nodeList = [
-      TreeNode('Main Node #1', subNodes: [
-        TreeNode('Main 1 Node #1'),
-        TreeNode('Main 1 Node #2'),
-      ]),
-      TreeNode('Main Node #2', subNodes: [
-        TreeNode('Main 2 Node #1'),
-        TreeNode('Main 2 Node #2'),
-      ]),
-    ];
     await tester.pumpWidget(
       MaterialApp(
         home: ExpandableTree(
-          nodes: nodeList,
+          nodes: nodeListWithSubNodes,
           nodeBuilder: (context, itemValue) {
             return Text(itemValue.toString());
           },
@@ -66,7 +106,7 @@ void main() {
       ),
     );
 
-    await tester.pump();
+    // await tester.pump();
 
     // debugDumpApp();
 
@@ -79,26 +119,10 @@ void main() {
     final subItemText = find.text('Main 1 Node #2');
     expect(subItemText, findsNothing);
 
-    var et = ExpandableTree<String>(
-      onSelect: (s) {},
-      nodeBuilder: (cntext, nodeValue) {
-        return Container();
-      },
-      nodes: [],
-    );
-    final menuFinder = find.byType(et.runtimeType);
+    final menuFinder = find.byType(expandableTreeStringType);
     expect(menuFinder, findsOneWidget);
 
-    final submenu = ExpandableSubTree<String>(
-      node: TreeNode('Data'),
-      onSelect: (s) {},
-      nodeBuilder: (cntext, nodeValue) {
-        return Container();
-      },
-      subNodes: [],
-    );
-
-    final subMenuFinder = find.byType(submenu.runtimeType);
+    final subMenuFinder = find.byType(expandableSubTreeStringType);
     expect(subMenuFinder, findsNWidgets(2));
 
     var clickThis = find.byIcon(Icons.expand_more);
@@ -109,5 +133,29 @@ void main() {
 
     final leafsAfterClick = find.byType(ExpandableMenuLeafNode);
     expect(leafsAfterClick, findsNWidgets(2));
+  });
+
+  testWidgets('Sub-nodes initially expanded', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ExpandableTree(
+          initiallyExpanded: true,
+          nodes: nodeListWithSubNodes,
+          nodeBuilder: (context, itemValue) {
+            return Text(itemValue.toString());
+          },
+        ),
+      ),
+    );
+
+    final text = find.text('Main Node #1');
+    expect(text, findsOneWidget);
+
+    final subItem = find.byType(ExpandableMenuLeafNode);
+    expect(subItem, findsNWidgets(5));
+
+    final subItemText = find.text('Node 2-2-2');
+    expect(subItemText, findsOneWidget);
+
   });
 }

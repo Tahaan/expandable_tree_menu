@@ -18,7 +18,7 @@ class ExpandableMenuLeafNode extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        DEFAULT_LEAFNODE_TWISTY,
+        // DEFAULT_LEAFNODE_TWISTY,
         GestureDetector(
           onTap: onSelect,
           child: child,
@@ -54,15 +54,17 @@ class ExpandableNode extends StatelessWidget {
 
 /// Wrapper for node with children / sub-items.  Maintains the open/closed
 ///  state of this sub-tree.
-class ExpandableSubTree<T> extends StatefulWidget {
+class CustomSubTreeWrapper<T> extends StatelessWidget {
   final Function(T value)? onSelect;
   final List<TreeNode<T>> subNodes;
   final Widget closedTwisty;
   final Widget openTwisty;
   final Widget Function(BuildContext, T) nodeBuilder; // Use Label
   final TreeNode<T> node; // Null when this is the root of the tree
+  final double childIndent;
+  final TwistyState defaultState;
 
-  const ExpandableSubTree({
+  const CustomSubTreeWrapper({
     Key? key,
     this.onSelect,
     this.closedTwisty = DEFAULT_CLOSED_TWISTY,
@@ -70,79 +72,38 @@ class ExpandableSubTree<T> extends StatefulWidget {
     required this.subNodes,
     required this.nodeBuilder,
     required this.node,
+    required this.childIndent,
+    required this.defaultState,
   }) : super(key: key);
 
   @override
-  _ExpandableSubTreeState createState() => _ExpandableSubTreeState<T>();
-}
-
-class _ExpandableSubTreeState<T> extends State<ExpandableSubTree<T>> {
-  TwistyState state = DEFAULT_EXPANDED_STATE;
-
-  @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        // Twisty and a Sub-menu
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
+    return Material(
+      child: ExpansionTile(
+        initiallyExpanded: defaultState == TwistyState.open,
+        tilePadding: EdgeInsets.zero,
+        childrenPadding: EdgeInsets.only(left: childIndent),
+        title: ExpandableNode(
+          onSelect: () {
+            onSelect!(node.value);
+          },
+          child: nodeBuilder(context, node.value),
+        ),
         children: [
-          // Twisty
-          GestureDetector(
-            onTap: toggleState,
-            child: state == TwistyState.open
-                ? widget.openTwisty
-                : widget.closedTwisty,
+          _ThinDivider(),
+          ExpandableTree<T>(
+            initiallyExpanded: defaultState == TwistyState.open,
+            childIndent: childIndent,
+            nodes: subNodes,
+            nodeBuilder: nodeBuilder,
+            onSelect: onSelect,
           ),
-          // Sub-menu
-          Expanded(
-            child: Container(
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ExpandableNode(
-                        onSelect: () {
-                          widget.onSelect!(widget.node.value);
-                        },
-                        child: widget.nodeBuilder(context, widget.node.value),
-                      ),
-                      Container(
-                        child: state == TwistyState.open
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  _ThinDivider(),
-                                  ExpandableTree<T>(
-                                    nodes: widget.subNodes,
-                                    nodeBuilder: widget.nodeBuilder,
-                                    onSelect: widget.onSelect,
-                                  ),
-                                ],
-                              )
-                            : null,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          )
         ],
       ),
     );
+
   }
 
-  void toggleState() {
-    setState(() {
-      state =
-          (state == TwistyState.open) ? TwistyState.closed : TwistyState.open;
-    });
-  }
 }
 
 class _ThinDivider extends StatelessWidget {
@@ -153,8 +114,7 @@ class _ThinDivider extends StatelessWidget {
       child: Container(
         // width: double.infinity,
         decoration: BoxDecoration(
-            border: Border.symmetric(
-                horizontal: BorderSide(width: 0.5))),
+            border: Border.symmetric(horizontal: BorderSide(width: 0.5))),
       ),
     );
   }
