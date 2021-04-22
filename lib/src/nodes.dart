@@ -19,7 +19,7 @@ class ExpandableMenuLeafNode extends StatelessWidget {
     return Row(
       children: [
         // DEFAULT_LEAFNODE_TWISTY,
-        GestureDetector(
+        InkWell(
           onTap: onSelect,
           child: child,
         )
@@ -42,7 +42,7 @@ class ExpandableNode extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: GestureDetector(
+      child: InkWell(
         onTap: onSelect,
         child: child,
       ),
@@ -100,6 +100,8 @@ class _CustomSubTreeWrapperState<T> extends State<CustomSubTreeWrapper<T>> {
   @override
   Widget build(BuildContext context) {
     return Material(
+
+
       child: ExpansionTile(
         onExpansionChanged: toggleState,
         // leading: widget.openTwisty,
