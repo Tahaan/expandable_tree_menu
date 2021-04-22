@@ -1,3 +1,8 @@
+## 0.1.0-dev.4
+
+* Documentation Updated
+* New animation recorded to highlight custom Node widgets
+
 ## 0.1.0-dev.3
 
 * API Docs added
