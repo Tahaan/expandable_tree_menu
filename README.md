@@ -3,7 +3,7 @@
 Builds a Tree of Sub-menus that can be expanded/collapsed, where each node can recursively 
 contain another tree, using a recursive list of "Nodes".
 
-![Demo](https://media4.giphy.com/media/PyUuaYIhNXHrTFde85/giphy.gif)
+![Demo](https://media2.giphy.com/media/g325GimaElViwKJcao/giphy.gif)
 
 Each Node has a value payload that will be passed to the onSelect handler.  
 
