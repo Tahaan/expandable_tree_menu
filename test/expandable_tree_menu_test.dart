@@ -30,17 +30,6 @@ final _et = ExpandableTree<String>(
 
 Type typeOf<T>() => T;
 
-final _expandableSubTree = CustomSubTreeWrapper<String>(
-  defaultState: TwistyState.closed,
-  childIndent: DEFAULT_CHILD_INDENT,
-  node: TreeNode('Data'),
-  onSelect: (s) {},
-  nodeBuilder: (context, nodeValue) {
-    return Container();
-  },
-  subNodes: [],
-);
-
 
 void main() {
   testWidgets('Test With Empty List of Nodes', (WidgetTester tester) async {
