@@ -27,8 +27,8 @@ final _et = ExpandableTree<String>(
   nodes: [],
 );
 
-final expandableTreeStringType = _et.runtimeType;
 
+Type typeOf<T>() => T;
 
 final _expandableSubTree = CustomSubTreeWrapper<String>(
   defaultState: TwistyState.closed,
@@ -41,7 +41,6 @@ final _expandableSubTree = CustomSubTreeWrapper<String>(
   subNodes: [],
 );
 
-final expandableSubTreeStringType = _expandableSubTree.runtimeType;
 
 void main() {
   testWidgets('Test With Empty List of Nodes', (WidgetTester tester) async {
@@ -56,7 +55,7 @@ void main() {
       ),
     );
 
-    debugDumpApp();
+    // debugDumpApp();
 
     final subItem = find.byType(ExpandableMenuLeafNode);
     expect(subItem, findsNothing);
@@ -89,7 +88,7 @@ void main() {
     final nodes = find.byType(ExpandableMenuLeafNode);
     expect(nodes, findsNWidgets(3));
 
-    final menuFinder = find.byType(expandableTreeStringType);
+    final menuFinder = find.byType(typeOf<ExpandableTree<String>>());
     expect(menuFinder, findsOneWidget);
   });
 
@@ -119,10 +118,10 @@ void main() {
     final subItemText = find.text('Main 1 Node #2');
     expect(subItemText, findsNothing);
 
-    final menuFinder = find.byType(expandableTreeStringType);
+    final menuFinder = find.byType(typeOf<ExpandableTree<String>>());
     expect(menuFinder, findsOneWidget);
 
-    final subMenuFinder = find.byType(expandableSubTreeStringType);
+    final subMenuFinder = find.byType(typeOf<CustomSubTreeWrapper<String>>());
     expect(subMenuFinder, findsNWidgets(2));
 
     var clickThis = find.byIcon(Icons.expand_more);
