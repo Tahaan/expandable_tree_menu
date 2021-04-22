@@ -5,9 +5,17 @@ import 'package:flutter/material.dart';
 import 'src/defaults.dart';
 import 'src/nodes.dart';
 
+/// State of the Expandable items.
+/// root <- No Node value (cannot collapse)
+/// leaf <- Node with no children (cannot expand)
+/// open <- Children expanded, can be collapsed
+/// closed <- Children collapsed, can be expanded
 enum TwistyState { root, open, closed, leaf }
-enum TwistyPosition { before, after }
 
+/// Placement of the twisty on a node with Children
+/// before - On the left of the Node
+/// after - On the right of the Node
+enum TwistyPosition { before, after }
 
 /// The data type for tree nodes.
 ///
@@ -19,6 +27,9 @@ class TreeNode<T> {
   final T value;
   final List<TreeNode<T>> subNodes;
 
+  /// Construct a TreeNode with optional List of children
+  /// [value] payload of the node
+  /// [subNodes] list of Child nodes
   const TreeNode(
     this.value, {
     this.subNodes = const [],
@@ -65,6 +76,8 @@ class ExpandableTree<T> extends StatelessWidget {
 
   // TODO: Add a controller to allow Expand-all / collapse-all functionality
 
+  /// Default constructor.  Used for the root as well as any sub-nodes that can
+  ///  be expanded to show children
   const ExpandableTree({
     Key? key,
     this.onSelect,
@@ -84,12 +97,12 @@ class ExpandableTree<T> extends StatelessWidget {
     return ListView.builder(
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemBuilder: itemBuilder,
+      itemBuilder: _itemBuilder,
       itemCount: nodes.length,
     );
   }
 
-  Widget itemBuilder(BuildContext context, int itemIndex) {
+  Widget _itemBuilder(BuildContext context, int itemIndex) {
     if (nodes[itemIndex].subNodes.isEmpty) {
       return ExpandableMenuLeafNode(
           onSelect: () {
