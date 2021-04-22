@@ -19,9 +19,11 @@ class ExpandableMenuLeafNode extends StatelessWidget {
     return Row(
       children: [
         // DEFAULT_LEAFNODE_TWISTY,
-        InkWell(
-          onTap: onSelect,
-          child: child,
+        Material(
+          child: InkWell(
+            onTap: onSelect,
+            child: child,
+          ),
         )
       ],
     );
