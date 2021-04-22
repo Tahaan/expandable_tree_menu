@@ -1,5 +1,4 @@
 import 'package:expandable_tree_menu/expandable_tree_menu.dart';
-import 'package:expandable_tree_menu/src/defaults.dart';
 import 'package:expandable_tree_menu/src/nodes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -18,14 +17,6 @@ final nodeListWithSubNodes = [
     ]),
   ]),
 ];
-
-final _et = ExpandableTree<String>(
-  onSelect: (s) {},
-  nodeBuilder: (cntext, nodeValue) {
-    return Container();
-  },
-  nodes: [],
-);
 
 
 Type typeOf<T>() => T;
@@ -183,8 +174,8 @@ void main() {
     //   Main Node #1 (closed)
     //   Main Node #2 (closed)
 
-    findOpenNodes() => find.byIcon(Icons.add);
-    findClosedNodes() => find.byIcon(Icons.arrow_forward);
+    Finder findOpenNodes() => find.byIcon(Icons.add);
+    Finder findClosedNodes() => find.byIcon(Icons.arrow_forward);
 
     final allIconsFound = find.byType(Icon);
     expect(allIconsFound, findsNWidgets(2));
