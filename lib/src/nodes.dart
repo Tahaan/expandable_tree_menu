@@ -99,7 +99,9 @@ class _CustomSubTreeWrapperState<T> extends State<CustomSubTreeWrapper<T>> {
       child: ExpansionTile(
         onExpansionChanged: toggleState,
         // leading: widget.openTwisty,
-        trailing: twistyState == TwistyState.open ? widget.openTwisty : widget.closedTwisty,
+        trailing: twistyState == TwistyState.open
+            ? widget.openTwisty
+            : widget.closedTwisty,
         iconColor: widget.openTwistyColor,
         collapsedIconColor: widget.closedTwistyColor,
         initiallyExpanded: widget.defaultState == TwistyState.open,
@@ -134,7 +136,6 @@ class _CustomSubTreeWrapperState<T> extends State<CustomSubTreeWrapper<T>> {
       twistyState = isExpanded ? TwistyState.open : TwistyState.closed;
     });
   }
-
 }
 
 class _ThinDivider extends StatelessWidget {

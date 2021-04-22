@@ -10,17 +10,14 @@ final nodeListWithSubNodes = [
   ]),
   TreeNode('Main Node #2', subNodes: [
     TreeNode('Main 2 Node #1'),
-    TreeNode('Main 2 Node #2',
-    subNodes: [
+    TreeNode('Main 2 Node #2', subNodes: [
       TreeNode('Node 2-2-1'),
       TreeNode('Node 2-2-2'),
     ]),
   ]),
 ];
 
-
 Type typeOf<T>() => T;
-
 
 void main() {
   testWidgets('Test With Empty List of Nodes', (WidgetTester tester) async {
@@ -42,8 +39,6 @@ void main() {
 
     final menuFinder = find.byType(ExpandableTree);
     expect(menuFinder, findsOneWidget);
-
-
   });
 
   testWidgets('Test With 3 simple String nodes', (WidgetTester tester) async {
@@ -77,8 +72,7 @@ void main() {
     // TODO: Test handling of Taps
   });
 
-  testWidgets('Test With sub-nodes',
-      (WidgetTester tester) async {
+  testWidgets('Test With sub-nodes', (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: ExpandableTree(
@@ -140,7 +134,6 @@ void main() {
 
     final subItemText = find.text('Node 2-2-2');
     expect(subItemText, findsOneWidget);
-
   });
   testWidgets('Test Open and Close with customer Twisty Icons', (tester) async {
     await tester.pumpWidget(
@@ -216,6 +209,5 @@ void main() {
 
     closedIcon = findClosedNodes();
     expect(closedIcon, findsNWidgets(2));
-
   });
 }
