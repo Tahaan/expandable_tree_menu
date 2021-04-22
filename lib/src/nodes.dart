@@ -52,9 +52,8 @@ class ExpandableNode extends StatelessWidget {
 
 // TODO: Consider allowing a custom "SubTree" node, eg Flutter "ExpansionTile"
 
-/// Wrapper for node with children / sub-items.  Maintains the open/closed
-///  state of this sub-tree.
-class CustomSubTreeWrapper<T> extends StatelessWidget {
+/// Wrapper for node with children / sub-items.
+class CustomSubTreeWrapper<T> extends StatefulWidget {
   final Function(T value)? onSelect;
   final List<TreeNode<T>> subNodes;
   final Widget closedTwisty;
@@ -63,6 +62,8 @@ class CustomSubTreeWrapper<T> extends StatelessWidget {
   final TreeNode<T> node; // Null when this is the root of the tree
   final double childIndent;
   final TwistyState defaultState;
+  final Color? openTwistyColor;
+  final Color? closedTwistyColor;
 
   const CustomSubTreeWrapper({
     Key? key,
@@ -74,34 +75,64 @@ class CustomSubTreeWrapper<T> extends StatelessWidget {
     required this.node,
     required this.childIndent,
     required this.defaultState,
+    this.openTwistyColor,
+    this.closedTwistyColor,
   }) : super(key: key);
+
+  @override
+  _CustomSubTreeWrapperState<T> createState() =>
+      _CustomSubTreeWrapperState<T>();
+}
+
+class _CustomSubTreeWrapperState<T> extends State<CustomSubTreeWrapper<T>> {
+  TwistyState twistyState = DEFAULT_EXPANDED_STATE;
+
+  @override
+  void initState() {
+    twistyState = widget.defaultState;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Material(
       child: ExpansionTile(
-        initiallyExpanded: defaultState == TwistyState.open,
+        onExpansionChanged: toggleState,
+        // leading: widget.openTwisty,
+        trailing: twistyState == TwistyState.open ? widget.openTwisty : widget.closedTwisty,
+        iconColor: widget.openTwistyColor,
+        collapsedIconColor: widget.closedTwistyColor,
+        initiallyExpanded: widget.defaultState == TwistyState.open,
         tilePadding: EdgeInsets.zero,
-        childrenPadding: EdgeInsets.only(left: childIndent),
+        childrenPadding: EdgeInsets.only(left: widget.childIndent),
         title: ExpandableNode(
           onSelect: () {
-            onSelect!(node.value);
+            widget.onSelect!(widget.node.value);
           },
-          child: nodeBuilder(context, node.value),
+          child: widget.nodeBuilder(context, widget.node.value),
         ),
         children: [
           _ThinDivider(),
           ExpandableTree<T>(
-            initiallyExpanded: defaultState == TwistyState.open,
-            childIndent: childIndent,
-            nodes: subNodes,
-            nodeBuilder: nodeBuilder,
-            onSelect: onSelect,
+            initiallyExpanded: widget.defaultState == TwistyState.open,
+            childIndent: widget.childIndent,
+            nodes: widget.subNodes,
+            nodeBuilder: widget.nodeBuilder,
+            onSelect: widget.onSelect,
+            openTwistyColor: widget.openTwistyColor,
+            closedTwistyColor: widget.closedTwistyColor,
+            openTwisty: widget.openTwisty,
+            closedTwisty: widget.closedTwisty,
           ),
         ],
       ),
     );
+  }
 
+  void toggleState(bool isExpanded) {
+    setState(() {
+      twistyState = isExpanded ? TwistyState.open : TwistyState.closed;
+    });
   }
 
 }

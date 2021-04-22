@@ -52,6 +52,8 @@ class ExpandableTree<T> extends StatelessWidget {
   final Widget Function(BuildContext, T) nodeBuilder; // Use Label
   final double childIndent;
   final bool initiallyExpanded;
+  final Color? openTwistyColor;
+  final Color? closedTwistyColor;
 
   // TODO: Add a controller to allow Expand-all / collapse-all functionality
 
@@ -64,6 +66,8 @@ class ExpandableTree<T> extends StatelessWidget {
     required this.nodeBuilder,
     this.childIndent = DEFAULT_CHILD_INDENT,
     this.initiallyExpanded = false,
+    this.openTwistyColor,
+    this.closedTwistyColor,
   }) : super(key: key);
 
   @override
@@ -85,6 +89,10 @@ class ExpandableTree<T> extends StatelessWidget {
           child: nodeBuilder(context, nodes[itemIndex].value));
     }
     return CustomSubTreeWrapper<T>(
+      openTwistyColor: openTwistyColor,
+      closedTwistyColor: closedTwistyColor,
+      openTwisty: openTwisty,
+      closedTwisty: closedTwisty,
       childIndent: childIndent,
       defaultState: initiallyExpanded ? TwistyState.open : TwistyState.closed,
       onSelect: onSelect,

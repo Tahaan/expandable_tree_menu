@@ -79,6 +79,11 @@ void main() {
 
     final menuFinder = find.byType(typeOf<ExpandableTree<String>>());
     expect(menuFinder, findsOneWidget);
+
+    await tester.tap(menuFinder.first);
+    await tester.pump();
+
+    // TODO: Test handling of Taps
   });
 
   testWidgets('Test With sub-nodes',
@@ -144,6 +149,82 @@ void main() {
 
     final subItemText = find.text('Node 2-2-2');
     expect(subItemText, findsOneWidget);
+
+  });
+  testWidgets('Test Open and Close with customer Twisty Icons', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ExpandableTree(
+          openTwisty: Icon(Icons.add),
+          closedTwisty: Icon(Icons.arrow_forward),
+          openTwistyColor: Colors.red,
+          initiallyExpanded: false,
+          nodes: nodeListWithSubNodes,
+          nodeBuilder: (context, itemValue) {
+            return Text(itemValue.toString());
+          },
+        ),
+      ),
+    );
+
+    // Data:
+    //
+    //   Main Node #1
+    //     Main 1 Node #1 (leaf)
+    //     Main 1 Node #2 (leaf)
+    //   Main Node #2
+    //     Main 2 Node #1 (leaf)
+    //     Main 2 Node #2
+    //       Node 2-2-1 (leaf)
+    //       Node 2-2-2 (leaf)
+
+    // Initial View expected:
+    //
+    //   Main Node #1 (closed)
+    //   Main Node #2 (closed)
+
+    findOpenNodes() => find.byIcon(Icons.add);
+    findClosedNodes() => find.byIcon(Icons.arrow_forward);
+
+    final allIconsFound = find.byType(Icon);
+    expect(allIconsFound, findsNWidgets(2));
+
+    var openIcon = findOpenNodes();
+    var closedIcon = findClosedNodes();
+    expect(closedIcon, findsNWidgets(2));
+    expect(openIcon, findsNothing);
+
+    await tester.tap(closedIcon.last);
+    await tester.pump();
+
+    // Expected View
+    //   Main Node #1 (closed)
+    //   Main Node #2 (open)
+    //     Main 2 Node #1 (leaf)
+    //     Main 2 Node #2 (closed)
+
+    openIcon = findOpenNodes();
+    expect(openIcon, findsOneWidget);
+
+    closedIcon = findClosedNodes();
+    expect(closedIcon, findsNWidgets(2));
+
+    final visibleNodeIcons = find.byType(Icon);
+    expect(visibleNodeIcons, findsNWidgets(3));
+
+    await tester.tap(openIcon.first);
+    await tester.pump();
+
+    // Final View expected:
+    //
+    //   Main Node #1 (closed)
+    //   Main Node #2 (closed)
+
+    openIcon = findOpenNodes();
+    expect(openIcon, findsNothing);
+
+    closedIcon = findClosedNodes();
+    expect(closedIcon, findsNWidgets(2));
 
   });
 }
