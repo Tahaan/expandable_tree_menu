@@ -45,6 +45,7 @@ class ExpandableNode extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: InkWell(
+
         onTap: onSelect,
         child: child,
       ),
@@ -70,6 +71,7 @@ class CustomSubTreeWrapper<T> extends StatefulWidget {
   final TwistyState defaultState;
   final Color? openTwistyColor;
   final Color? closedTwistyColor;
+  final TwistyPosition twistyPosition;
 
   const CustomSubTreeWrapper({
     Key? key,
@@ -81,6 +83,7 @@ class CustomSubTreeWrapper<T> extends StatefulWidget {
     required this.node,
     required this.childIndent,
     required this.defaultState,
+    required this.twistyPosition,
     this.openTwistyColor,
     this.closedTwistyColor,
   }) : super(key: key);
@@ -102,14 +105,18 @@ class _CustomSubTreeWrapperState<T> extends State<CustomSubTreeWrapper<T>> {
   @override
   Widget build(BuildContext context) {
     return Material(
-
-
       child: ExpansionTile(
         onExpansionChanged: toggleState,
-        // leading: widget.openTwisty,
-        trailing: twistyState == TwistyState.open
-            ? widget.openTwisty
-            : widget.closedTwisty,
+        leading: widget.twistyPosition == TwistyPosition.before
+            ? (twistyState == TwistyState.open
+                ? widget.openTwisty
+                : widget.closedTwisty)
+            : null,
+        trailing: widget.twistyPosition == TwistyPosition.after
+            ? (twistyState == TwistyState.open
+                ? widget.openTwisty
+                : widget.closedTwisty)
+            :SizedBox.shrink(),
         iconColor: widget.openTwistyColor,
         collapsedIconColor: widget.closedTwistyColor,
         initiallyExpanded: widget.defaultState == TwistyState.open,
@@ -124,6 +131,7 @@ class _CustomSubTreeWrapperState<T> extends State<CustomSubTreeWrapper<T>> {
         children: [
           _ThinDivider(),
           ExpandableTree<T>(
+            twistyPosition: widget.twistyPosition,
             initiallyExpanded: widget.defaultState == TwistyState.open,
             childIndent: widget.childIndent,
             nodes: widget.subNodes,

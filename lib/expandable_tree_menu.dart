@@ -5,6 +5,10 @@ import 'package:flutter/material.dart';
 import 'src/defaults.dart';
 import 'src/nodes.dart';
 
+enum TwistyState { root, open, closed, leaf }
+enum TwistyPosition { before, after }
+
+
 /// The data type for tree nodes.
 ///
 /// The type [T] is the [value] type that will be used by the [nodeBuilder]
@@ -31,6 +35,7 @@ class TreeNode<T> {
 /// [nodeBuilder] called to render the node itself from the node's data.
 /// [openTwistyColor] Color override to use when node is expanded
 /// [closedTwistyColor] Override icon color when node is collapsed
+/// [twistyPosition] Positioning of the Twisty to be placed before or after (default) the node
 ///
 /// Example:
 ///   return ExpandableMenu<String>(
@@ -56,6 +61,7 @@ class ExpandableTree<T> extends StatelessWidget {
   final bool initiallyExpanded;
   final Color? openTwistyColor;
   final Color? closedTwistyColor;
+  final TwistyPosition twistyPosition;
 
   // TODO: Add a controller to allow Expand-all / collapse-all functionality
 
@@ -70,6 +76,7 @@ class ExpandableTree<T> extends StatelessWidget {
     this.initiallyExpanded = false,
     this.openTwistyColor,
     this.closedTwistyColor,
+    this.twistyPosition = DEFAULT_TWISTY_POSITION,
   }) : super(key: key);
 
   @override
@@ -101,6 +108,7 @@ class ExpandableTree<T> extends StatelessWidget {
       subNodes: nodes[itemIndex].subNodes,
       nodeBuilder: nodeBuilder,
       node: nodes[itemIndex],
+      twistyPosition: twistyPosition,
     );
   }
 }

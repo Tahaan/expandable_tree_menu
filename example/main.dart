@@ -87,6 +87,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+
+
 // A less contrived example would use a DataModel as type for the value
 class DetailPage extends StatelessWidget {
   final value;
