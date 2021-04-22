@@ -65,11 +65,6 @@ void main() {
 
     final menuFinder = find.byType(typeOf<ExpandableTree<String>>());
     expect(menuFinder, findsOneWidget);
-
-    await tester.tap(menuFinder.first);
-    await tester.pump();
-
-    // TODO: Test handling of Taps
   });
 
   testWidgets('Test With sub-nodes', (WidgetTester tester) async {
