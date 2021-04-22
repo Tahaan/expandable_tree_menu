@@ -26,9 +26,11 @@ class TreeNode<T> {
 ///
 /// [onSelect] callBack of the selected node in the menu
 /// [nodes] List of nodes at this level of the menu
-/// [closedTwisty] Widget to display when the node is collapsed
-/// [openTwisty] widget to display when the node is expanded
+/// [closedTwisty] Override Twisty Widget when node is collapsed
+/// [openTwisty] Override Twisty Widget when node is expanded
 /// [nodeBuilder] called to render the node itself from the node's data.
+/// [openTwistyColor] Color override to use when node is expanded
+/// [closedTwistyColor] Override icon color when node is collapsed
 ///
 /// Example:
 ///   return ExpandableMenu<String>(
@@ -45,11 +47,11 @@ class TreeNode<T> {
 ///       );
 ///
 class ExpandableTree<T> extends StatelessWidget {
-  final Function(T value)? onSelect;
+  final NodeSelectedCallback<T>? onSelect;
   final List<TreeNode<T>> nodes;
   final Widget closedTwisty;
   final Widget openTwisty;
-  final Widget Function(BuildContext, T) nodeBuilder; // Use Label
+  final NodeBuilder<T> nodeBuilder; // Use Label
   final double childIndent;
   final bool initiallyExpanded;
   final Color? openTwistyColor;

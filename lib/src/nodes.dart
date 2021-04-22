@@ -50,15 +50,19 @@ class ExpandableNode extends StatelessWidget {
   }
 }
 
+typedef NodeSelectedCallback<T> = void Function(T value);
+
+typedef NodeBuilder<T> = Widget Function(BuildContext context, T value);
+
 // TODO: Consider allowing a custom "SubTree" node, eg Flutter "ExpansionTile"
 
 /// Wrapper for node with children / sub-items.
 class CustomSubTreeWrapper<T> extends StatefulWidget {
-  final Function(T value)? onSelect;
+  final NodeSelectedCallback<T>? onSelect;
   final List<TreeNode<T>> subNodes;
   final Widget closedTwisty;
   final Widget openTwisty;
-  final Widget Function(BuildContext, T) nodeBuilder; // Use Label
+  final NodeBuilder<T> nodeBuilder;
   final TreeNode<T> node; // Null when this is the root of the tree
   final double childIndent;
   final TwistyState defaultState;

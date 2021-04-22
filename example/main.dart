@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: ExpandableTree(
                 nodes: nodes,
                 nodeBuilder: _nodeBuilder,
-                onSelect: (dynamic node) => _nodeSelected(context, node),
+                onSelect: (node) => _nodeSelected(context, node),
               ),
             ),
           ),
