@@ -3,12 +3,14 @@
 Builds a Tree of Sub-menus that can be expanded/collapsed, where each node can recursively 
 contain another tree, using a recursive list of "Nodes".
 
+![Demo](https://media4.giphy.com/media/PyUuaYIhNXHrTFde85/giphy.gif)
+
 Each Node has a value payload that will be passed to the onSelect handler.  
 
 Nodes are rendered using a nodeBuilder which will use the value of the node.
 
 
-```
+```dart
 ExpandableTree(
     nodes: [
      TreeNode('Category A', subNodes: [

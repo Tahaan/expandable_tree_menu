@@ -1,6 +1,6 @@
 name: expandable_tree_menu
-description: Expandable Tree menu from a recursive list of nodes
-version: 0.1.0-dev.1
+description: Tree of menu-nodes that can be expanded/collapsed to review more menu nodes, built from a recursive list of nodes.
+version: 0.1.0-dev.2
 homepage: https://github.com/Tahaan/expandable_tree_menu
 repository: https://github.com/Tahaan/expandable_tree_menu
 
@@ -18,9 +18,3 @@ dev_dependencies:
   pedantic: ^1.11.0
 
 flutter:
-  platforms:
-    android:
-      package: za.co.webmaster
-      pluginClass: ExpandableTree
-    ios:
-      pluginClass: ExpandableTree
