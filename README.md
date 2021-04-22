@@ -1,31 +1,31 @@
 # expandable_tree_menu
 
-A Tree of Sub-menus that can be expanded/collapsed, where each node can recursively contain another
-tree.
+Builds a Tree of Sub-menus that can be expanded/collapsed, where each node can recursively 
+contain another tree, using a recursive list of "Nodes".
 
-Using the onSelect callback allows the Tree to be used as a menu.
+Each Node has a value payload that will be passed to the onSelect handler.  
 
-## Getting Started
+Nodes are rendered using a nodeBuilder which will use the value of the node.
 
-Add the dependency to the pubspec.yaml file
-
-```
-dependencies:
-    ...
-    expandable_tree_menu: ^0.1.0
-```
-
-Import it
-
-`import 'package:expandable_tree_menu/expandable_tree_menu.dart';`
-
-
-Instantiate it somewhere
 
 ```
 ExpandableTree(
-    nodes: _nodesFromBooks(bookNodes),
-    nodeBuilder: _nodeBuilder,
-    onSelect: (dynamic node) => _nodeSelected(context, node),
+    nodes: [
+     TreeNode('Category A', subNodes: [
+       TreeNode('CatA first item'),
+       TreeNode('CatA second item'),
+     ]),
+     TreeNode('Category B', subNodes: [
+       TreeNode('Cat B first item'),
+       TreeNode('Cat B sub-category 1', subNodes: [
+         TreeNode('Cat B1 first item'),
+         TreeNode('Cat B1 second item'),
+         TreeNode('Cat B1 third item'),
+         TreeNode('Cat B1 final item'),
+       ]),
+     ]),
+   ],
+    nodeBuilder: (context, nodeValue) => Card(child: Text(nodeValue.toString()),
+    onSelect: (node) => _nodeSelected(context, node),
   ), 
 ```
