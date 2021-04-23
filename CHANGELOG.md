@@ -1,3 +1,8 @@
+## 0.1.0-dev.5
+
+* More customisation options added (border, spacing, and colors for submenus as well as for 
+  submenu items)
+  
 ## 0.1.0-dev.4
 
 * Documentation Updated

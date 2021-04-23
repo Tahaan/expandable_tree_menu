@@ -17,6 +17,13 @@ Nodes are rendered using a nodeBuilder which will use the value of the node.
  - openTwisty: Widget // Widget used when children are expanded (default Icons.expand_less)
  - closedTwisty: Widget // Widget used when children are collapsed (default: Icons.expand_more)
  - childIndent: double // Left offset used for expanded children under the node (default: 28)
+ - submenuDecoration: BoxDecoration? // Border and background of submenu with children
+ - childrenDecoration: BoxDecoration // Border and background of children under submenu
+ - childrenMargin: EdgeInsets? // Margin around children under Submenu
+ - submenuMargin: EdgeInsets // Margin around submenu with children
+ - submenuClosedColor: Color // Used for submenu when collapsed
+ - submenuOpenColor:  Color // Used for submenu when expanded ;
+
 
 ### Basic Usage
 ```dart
