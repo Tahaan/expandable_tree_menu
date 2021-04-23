@@ -16,16 +16,12 @@ class ExpandableMenuLeafNode extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        // DEFAULT_LEAFNODE_TWISTY,
-        Material(
-          child: InkWell(
-            onTap: onSelect,
-            child: child,
-          ),
-        )
-      ],
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onSelect,
+        child: child,
+      ),
     );
   }
 }
@@ -45,7 +41,6 @@ class ExpandableNode extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: InkWell(
-
         onTap: onSelect,
         child: child,
       ),
@@ -71,7 +66,13 @@ class CustomSubTreeWrapper<T> extends StatefulWidget {
   final TwistyState defaultState;
   final Color? openTwistyColor;
   final Color? closedTwistyColor;
+  final Color? submenuClosedColor;
+  final Color? submenuOpenColor;
   final TwistyPosition twistyPosition;
+  final BoxDecoration? submenuDecoration;
+  final BoxDecoration? childrenDecoration;
+  final EdgeInsets? childrenMargin;
+  final EdgeInsets? submenuMargin;
 
   const CustomSubTreeWrapper({
     Key? key,
@@ -86,6 +87,12 @@ class CustomSubTreeWrapper<T> extends StatefulWidget {
     required this.twistyPosition,
     this.openTwistyColor,
     this.closedTwistyColor,
+    this.submenuDecoration,
+    this.childrenDecoration,
+    this.submenuMargin,
+    this.childrenMargin,
+    this.submenuClosedColor,
+    this.submenuOpenColor,
   }) : super(key: key);
 
   @override
@@ -105,44 +112,62 @@ class _CustomSubTreeWrapperState<T> extends State<CustomSubTreeWrapper<T>> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: ExpansionTile(
-        onExpansionChanged: toggleState,
-        leading: widget.twistyPosition == TwistyPosition.before
-            ? (twistyState == TwistyState.open
-                ? widget.openTwisty
-                : widget.closedTwisty)
-            : null,
-        trailing: widget.twistyPosition == TwistyPosition.after
-            ? (twistyState == TwistyState.open
-                ? widget.openTwisty
-                : widget.closedTwisty)
-            :SizedBox.shrink(),
-        iconColor: widget.openTwistyColor,
-        collapsedIconColor: widget.closedTwistyColor,
-        initiallyExpanded: widget.defaultState == TwistyState.open,
-        tilePadding: EdgeInsets.zero,
-        childrenPadding: EdgeInsets.only(left: widget.childIndent),
-        title: ExpandableNode(
-          onSelect: () {
-            widget.onSelect!(widget.node.value);
-          },
-          child: widget.nodeBuilder(context, widget.node.value),
-        ),
-        children: [
-          _ThinDivider(),
-          ExpandableTree<T>(
-            twistyPosition: widget.twistyPosition,
-            initiallyExpanded: widget.defaultState == TwistyState.open,
-            childIndent: widget.childIndent,
-            nodes: widget.subNodes,
-            nodeBuilder: widget.nodeBuilder,
-            onSelect: widget.onSelect,
-            openTwistyColor: widget.openTwistyColor,
-            closedTwistyColor: widget.closedTwistyColor,
-            openTwisty: widget.openTwisty,
-            closedTwisty: widget.closedTwisty,
+      // color: Colors.transparent,
+      child: Container(
+        margin: widget.submenuMargin,
+        decoration: widget.submenuDecoration,
+        child: ExpansionTile(
+
+          collapsedBackgroundColor: widget.submenuClosedColor,
+          backgroundColor: widget.submenuOpenColor,
+          onExpansionChanged: toggleState,
+          leading: widget.twistyPosition == TwistyPosition.before
+              ? (twistyState == TwistyState.open
+                  ? widget.openTwisty
+                  : widget.closedTwisty)
+              : null,
+          trailing: widget.twistyPosition == TwistyPosition.after
+              ? (twistyState == TwistyState.open
+                  ? widget.openTwisty
+                  : widget.closedTwisty)
+              : SizedBox.shrink(),
+          iconColor: widget.openTwistyColor,
+          collapsedIconColor: widget.closedTwistyColor,
+          initiallyExpanded: widget.defaultState == TwistyState.open,
+          tilePadding: EdgeInsets.zero,
+          childrenPadding: EdgeInsets.only(left: widget.childIndent),
+          title: ExpandableNode(
+            onSelect: () {
+              widget.onSelect!(widget.node.value);
+            },
+            child: widget.nodeBuilder(context, widget.node.value),
           ),
-        ],
+          children: [
+            // _ThinDivider(),
+            Container(
+              decoration: widget.childrenDecoration,
+              margin: widget.childrenMargin,
+              child: ExpandableTree<T>(
+                twistyPosition: widget.twistyPosition,
+                initiallyExpanded: widget.defaultState == TwistyState.open,
+                childIndent: widget.childIndent,
+                nodes: widget.subNodes,
+                nodeBuilder: widget.nodeBuilder,
+                onSelect: widget.onSelect,
+                openTwistyColor: widget.openTwistyColor,
+                closedTwistyColor: widget.closedTwistyColor,
+                openTwisty: widget.openTwisty,
+                closedTwisty: widget.closedTwisty,
+                childrenDecoration: widget.childrenDecoration,
+                submenuDecoration: widget.submenuDecoration,
+                submenuMargin: widget.submenuMargin,
+                childrenMargin: widget.childrenMargin,
+                submenuClosedColor: widget.submenuClosedColor,
+                submenuOpenColor: widget.submenuOpenColor,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -151,19 +176,5 @@ class _CustomSubTreeWrapperState<T> extends State<CustomSubTreeWrapper<T>> {
     setState(() {
       twistyState = isExpanded ? TwistyState.open : TwistyState.closed;
     });
-  }
-}
-
-class _ThinDivider extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 1),
-      child: Container(
-        // width: double.infinity,
-        decoration: BoxDecoration(
-            border: Border.symmetric(horizontal: BorderSide(width: 0.5))),
-      ),
-    );
   }
 }

@@ -39,14 +39,22 @@ class TreeNode<T> {
 /// Creates a (recursive) menu tree-structure where each item is either a leaf
 /// node or a sub-menu containing another tree-structure of sub-nodes.
 ///
-/// [onSelect] callBack of the selected node in the menu
-/// [nodes] List of nodes at this level of the menu
-/// [closedTwisty] Override Twisty Widget when node is collapsed
-/// [openTwisty] Override Twisty Widget when node is expanded
+/// [onSelect] callBack of the selected node in the menu.
+/// [nodes] List of nodes at this level of the menu.
+/// [closedTwisty] Override Twisty Widget when node is collapsed.
+/// [openTwisty] Override Twisty Widget when node is expanded.
 /// [nodeBuilder] called to render the node itself from the node's data.
-/// [openTwistyColor] Color override to use when node is expanded
-/// [closedTwistyColor] Override icon color when node is collapsed
-/// [twistyPosition] Positioning of the Twisty to be placed before or after (default) the node
+/// [openTwistyColor] Color override to use when node is expanded.
+/// [closedTwistyColor] Override icon color when node is collapsed.
+/// [twistyPosition] Positioning of the Twisty to be placed before or after.
+///   (default) the node.
+/// [submenuMargin] EdgeInsets to add margins around expandable groups.
+/// [submenuDecoration] BoxDecoration to set background and borders on
+///   expandable groups.
+/// [childrenMargin] EdgeInsets used to add margins around children under
+///   expandable items.
+/// [childrenDecoration] BoxDecoration to set background and borders on children
+///   under expandable items.
 ///
 /// Example:
 ///   return ExpandableMenu<String>(
@@ -73,6 +81,12 @@ class ExpandableTree<T> extends StatelessWidget {
   final Color? openTwistyColor;
   final Color? closedTwistyColor;
   final TwistyPosition twistyPosition;
+  final BoxDecoration? submenuDecoration;
+  final BoxDecoration? childrenDecoration;
+  final EdgeInsets? childrenMargin;
+  final EdgeInsets? submenuMargin;
+  final Color? submenuClosedColor;
+  final Color? submenuOpenColor;
 
   // TODO: Add a controller to allow Expand-all / collapse-all functionality
 
@@ -90,6 +104,12 @@ class ExpandableTree<T> extends StatelessWidget {
     this.openTwistyColor,
     this.closedTwistyColor,
     this.twistyPosition = DEFAULT_TWISTY_POSITION,
+    this.childrenDecoration,
+    this.submenuDecoration,
+    this.submenuMargin,
+    this.childrenMargin,
+    this.submenuClosedColor,
+    this.submenuOpenColor,
   }) : super(key: key);
 
   @override
@@ -111,6 +131,8 @@ class ExpandableTree<T> extends StatelessWidget {
           child: nodeBuilder(context, nodes[itemIndex].value));
     }
     return CustomSubTreeWrapper<T>(
+      submenuDecoration: submenuDecoration,
+      childrenDecoration: childrenDecoration,
       openTwistyColor: openTwistyColor,
       closedTwistyColor: closedTwistyColor,
       openTwisty: openTwisty,
@@ -122,6 +144,10 @@ class ExpandableTree<T> extends StatelessWidget {
       nodeBuilder: nodeBuilder,
       node: nodes[itemIndex],
       twistyPosition: twistyPosition,
+      submenuMargin: submenuMargin,
+      childrenMargin: childrenMargin,
+      submenuClosedColor: submenuClosedColor,
+      submenuOpenColor: submenuOpenColor,
     );
   }
 }
